@@ -103,8 +103,8 @@ defmodule PhxKeycloak do
     end
 
     pipeline :keycloak do
-      plug Keycloak.Plugs.RefreshUserTokenPlug
-      plug Keycloak.Plugs.GetClaimsPlug
+      plug Keycloak.Plugs.RefreshUserTokenPlug, Keycloak
+      plug Keycloak.Plugs.GetClaimsPlug, Keycloak
     end
 
     pipeline :auth_or_redirect do
@@ -168,22 +168,17 @@ defmodule PhxKeycloak do
         import Plug.Conn
         require Logger
 
-        def init(options) do
+        def init(keycloak_module) do
           # initialize options
-          options
+          keycloak_module
         end
 
-        def call(conn, _opts) do
+        def call(conn, keycloak_module) do
           existing_refresh_token = get_session(conn, :refresh_token)
 
-          {access_token, refresh_token} =
-            PhxKeycloak.UseCases.KeycloakRefreshToken.call(
-              existing_refresh_token,
-              Map.new(unquote(params))
-            )
+          {access_token, refresh_token} = keycloak_module.refresh_token(existing_refresh_token)
 
-          claims =
-            PhxKeycloak.UseCases.KeycloakUserClaims.call(access_token, Map.new(unquote(params)))
+          claims = keycloak_module.get_user_claims(access_token)
 
           case is_nil(claims) || %{} == claims do
             true ->
@@ -203,20 +198,17 @@ defmodule PhxKeycloak do
         @moduledoc false
         import Plug.Conn
 
-        def init(options) do
+        def init(keycloak_module) do
           # initialize options
-          options
+          keycloak_module
         end
 
-        def call(conn, _opts) do
+        def call(conn, keycloak_module) do
           existing_refresh_token = get_session(conn, :refresh_token)
 
           {_access_token, refresh_token} =
-            PhxKeycloak.UseCases.KeycloakRefreshToken.call(
-              existing_refresh_token,
-              Map.new(unquote(params))
-            )
-
+            keycloak_module.refresh_token(existing_refresh_token)
+              
           conn
           |> put_session(:refresh_token, refresh_token)
         end
