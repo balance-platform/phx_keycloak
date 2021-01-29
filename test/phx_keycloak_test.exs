@@ -14,7 +14,8 @@ defmodule PhxKeycloakTest do
       site: "http://localhost:8080",
       client_id: "cronos_client",
       client_secret: "secret",
-      redirect_uri: "http://localhost:4000/callback"
+      redirect_uri: "http://localhost:4000/callback",
+      expected_group: "admin"
   end
 
   @params %{

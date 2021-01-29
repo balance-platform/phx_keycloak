@@ -1,6 +1,6 @@
 defmodule PhxKeycloak do
   @moduledoc """
-  # Настройка 
+  # Настройка
 
   ## Главный модуль
 
@@ -18,13 +18,16 @@ defmodule PhxKeycloak do
 
     * redirect_uri - callback адрес вашего приложения
 
+    * expected_group - Группа (Роль), которой разрешен доступ к приложению (опционально)
+
   ```elixir
     defmodule MyAppWeb.Keycloak do
       use PhxKeycloak, realm: "cronos",
         site: "http://localhost:8080",
         client_id: "cronos_check_app",
         client_secret: "7c9fb08e-2d11-4921-bc02-cc21c92b6139",
-        redirect_uri: "http://localhost:4000/callback"
+        redirect_uri: "http://localhost:4000/callback",
+        expected_group: "app_admin"
     end
   ```
 
@@ -71,7 +74,7 @@ defmodule PhxKeycloak do
 
   ## Router
 
-  В MyAppWeb.Router добавляем следующие pipeline'ы: 
+  В MyAppWeb.Router добавляем следующие pipeline'ы:
 
   ```elixir
   ...
@@ -179,14 +182,34 @@ defmodule PhxKeycloak do
           {access_token, refresh_token} = keycloak_module.refresh_token(existing_refresh_token)
 
           claims = keycloak_module.get_user_claims(access_token)
+          groups = Access.get(claims, "groups")
 
-          case is_nil(claims) || %{} == claims do
-            true ->
-              Logger.warn("Plugs.GetClaimsPlug: no claims, clearing session")
+          if is_nil(groups) do
+            Logger.warn(
+              "Plugs.GetClaimsPlug: In Client settings enable Mappers -> Add builtin -> groups"
+            )
+          end
+
+          groups = groups || []
+          expected_group = unquote(params[:expected_group])
+
+          cond do
+            is_nil(claims) ->
+              Logger.warn("Plugs.GetClaimsPlug: nil claims, clearing session")
+              clear_session(conn)
+
+            %{} == claims && Map.keys(claims) == [] ->
+              Logger.warn("Plugs.GetClaimsPlug: empty claims, clearing session")
+              clear_session(conn)
+
+            expected_group != nil and expected_group not in groups ->
+              Logger.warn(
+                "Plugs.GetClaimsPlug: no expected_group in claims' groups, clearing session"
+              )
 
               clear_session(conn)
 
-            false ->
+            true ->
               conn
               |> put_session(:refresh_token, refresh_token)
               |> assign(:claims, claims)
@@ -206,9 +229,8 @@ defmodule PhxKeycloak do
         def call(conn, keycloak_module) do
           existing_refresh_token = get_session(conn, :refresh_token)
 
-          {_access_token, refresh_token} =
-            keycloak_module.refresh_token(existing_refresh_token)
-              
+          {_access_token, refresh_token} = keycloak_module.refresh_token(existing_refresh_token)
+
           conn
           |> put_session(:refresh_token, refresh_token)
         end

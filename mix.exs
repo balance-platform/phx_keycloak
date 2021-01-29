@@ -4,7 +4,7 @@ defmodule PhxKeycloak.MixProject do
   def project do
     [
       app: :phx_keycloak,
-      version: "0.1.1",
+      version: "0.2.0",
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -36,7 +36,7 @@ defmodule PhxKeycloak.MixProject do
       {:jason, "~> 1.0", optional: true},
       {:mock, "~> 0.3.0", only: :test},
       {:ex_doc, "~> 0.21", only: :dev, runtime: false},
-      {:credo, "~> 1.1.0", only: [:dev, :test], runtime: false},
+      {:credo, "~> 1.1.0", only: [:dev, :test], runtime: false}
     ]
   end
 

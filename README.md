@@ -1,20 +1,11 @@
 # PhxKeycloak
 
+Библиотека, отвечающая за проверку прав доступа к приложению с помощью системы Keycloak
 
-## Installation
+Краткую инструкцию по установке и запуску можно найти в документации к модулю PhxKeycloak
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `phx_keycloak` to your list of dependencies in `mix.exs`:
+# Добавление в проект
 
-```elixir
-def deps do
-  [
-    {:phx_keycloak, "~> 0.1.0"}
-  ]
-end
 ```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/phx_keycloak](https://hexdocs.pm/phx_keycloak).
-
+{:phx_keycloak, github: "balance-platform/phx_keycloak", tag: "0.2.0"}
+```
