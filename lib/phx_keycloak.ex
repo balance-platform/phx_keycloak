@@ -169,6 +169,7 @@ defmodule PhxKeycloak do
       defmodule Plugs.GetClaimsPlug do
         @moduledoc false
         import Plug.Conn
+        import Phoenix.Controller, only: [put_flash: 3]
         require Logger
 
         def init(keycloak_module) do
@@ -207,7 +208,9 @@ defmodule PhxKeycloak do
                 "Plugs.GetClaimsPlug: no expected_group in claims' groups, clearing session"
               )
 
-              clear_session(conn)
+              conn
+              |> clear_session()
+              |> put_flash(:error, "PhxKeycloak: User should have role ##{expected_group}")
 
             true ->
               conn
