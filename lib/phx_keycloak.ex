@@ -166,7 +166,6 @@ defmodule PhxKeycloak do
         PhxKeycloak.UseCases.KeycloakAuthorizeUrl.call(Map.new(unquote(params)))
       end
 
-
       def expected_group() do
         unquote(params[:expected_group])
       end

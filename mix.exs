@@ -30,7 +30,7 @@ defmodule PhxKeycloak.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:phoenix, "~> 1.4.9"},
+      {:phoenix, ">= 1.4.0"},
       {:httpoison, "~> 1.6"},
       {:plug_cowboy, "~> 2.0"},
       {:jason, "~> 1.0", optional: true},
