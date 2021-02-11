@@ -166,6 +166,11 @@ defmodule PhxKeycloak do
         PhxKeycloak.UseCases.KeycloakAuthorizeUrl.call(Map.new(unquote(params)))
       end
 
+
+      def expected_group() do
+        unquote(params[:expected_group])
+      end
+
       defmodule Plugs.GetClaimsPlug do
         @moduledoc false
         import Plug.Conn
@@ -192,7 +197,7 @@ defmodule PhxKeycloak do
           end
 
           groups = groups || []
-          expected_group = unquote(params[:expected_group])
+          expected_group = expected_group()
 
           cond do
             is_nil(claims) ->
