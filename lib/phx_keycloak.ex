@@ -196,7 +196,7 @@ defmodule PhxKeycloak do
           end
 
           groups = groups || []
-          expected_group = expected_group()
+          expected_group = keycloak_module.expected_group()
 
           cond do
             is_nil(claims) ->
