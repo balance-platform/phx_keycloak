@@ -1,24 +1,27 @@
 defmodule PhxKeycloak do
   @moduledoc """
-  # Настройка
+  # Settings
 
-  ## Главный модуль
+  ## Main module
 
-  Сначала необходимо определить модуль, который будет отвечать за авторизацию по Keycloak
+  First of all, we have to define main module, which will be responsible for auth by Keycloak
 
-  Обязательные параметры:
+  Required params:
 
     * realm - realm ID
 
     * site - endpoint Keycloak
 
-    * client_id - идентификатор клиента Keycloak
+    * client_id - Keycloak client identity
 
-    * client_secret - секретный токен клиента
+    * client_secret - Keycloak client secret token
 
-    * redirect_uri - callback адрес вашего приложения
+    * redirect_uri - callback for your app
 
-    * expected_group - Группа (Роль), которой разрешен доступ к приложению (опционально)
+
+  Optional params:
+
+    * expected_group - Role (Group), which have access to application
 
   ```elixir
     defmodule MyAppWeb.Keycloak do
@@ -31,18 +34,20 @@ defmodule PhxKeycloak do
     end
   ```
 
-  ## Plug'и
-  Теперь нам доступны следующие Plug'и:
+  ## Plugs
 
-    * MyAppWeb.Keycloak.Plugs.RefreshUserTokenPlug - Обновление токена
+  After this we have next Plug's:
 
-    * MyAppWeb.Keycloak.Plugs.GetClaimsPlug - получение информации о пользователе
+    * MyAppWeb.Keycloak.Plugs.RefreshUserTokenPlug - token update and refresh
 
-    * MyAppWeb.Keycloak.Plugs.RedirectUnauthorizedUserToLoginPlug, redirect_route: "/login" - редирект неавторизованного пользователя на указанный адрес
+    * MyAppWeb.Keycloak.Plugs.GetClaimsPlug - get claims about user
 
-  ## Контроллер
+    * MyAppWeb.Keycloak.Plugs.RedirectUnauthorizedUserToLoginPlug, redirect_route: "/login" - redirect to login page
 
-  Объявим контроллер, который будет логинить и разлогинить пользователя:
+  ## Controller
+
+  Define controller, for login and logout user:
+
   ```elixir
   defmodule MyAppWeb.AuthorizeController do
     use MyAppWeb, :controller
@@ -74,7 +79,7 @@ defmodule PhxKeycloak do
 
   ## Router
 
-  В MyAppWeb.Router добавляем следующие pipeline'ы:
+  In MyAppWeb.Router add next pipeline's:
 
   ```elixir
   ...
@@ -89,7 +94,7 @@ defmodule PhxKeycloak do
   ...
   ```
 
-  Теперь роутер должен выглядеть примерно так:
+  Now, our router looks like this:
 
   ```elixir
   defmodule MyAppWeb.Router do

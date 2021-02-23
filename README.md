@@ -9,7 +9,7 @@
 
 Library helps to setup SSO integration via Keycloak
 
-This is not very simple, but full instruction can be found at hex docs
+This is not very simple, but full instruction can be found at [hex docs](https://hexdocs.pm/phx_keycloak/PhxKeycloak.html)
 
 
 # Contribution
