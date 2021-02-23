@@ -9,12 +9,9 @@
 
 Library helps to setup SSO integration via Keycloak
 
-This is not very simple, full instruction can be found at 
+This is not very simple, but full instruction can be found at hex docs
 
-Краткую инструкцию по установке и запуску можно найти в документации к модулю PhxKeycloak
 
-# Добавление в проект
+# Contribution
 
-```
-{:phx_keycloak, github: "balance-platform/phx_keycloak", tag: "0.2.0"}
-```
+Feel free to make a pull request. All contributions are appreciated!
