@@ -26,7 +26,7 @@ defmodule PhxKeycloak.UseCases.KeycloakGetTokensByCode do
         {result["access_token"], result["refresh_token"]}
 
       otherwise ->
-        Logger.warn(
+        Logger.warning(
           "UseCases.KeycloakGetTokensByCode: Ошибка получения токенов, #{inspect(otherwise)}"
         )
 

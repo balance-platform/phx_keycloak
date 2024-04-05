@@ -195,7 +195,7 @@ defmodule PhxKeycloak do
           groups = Access.get(claims, "groups")
 
           if is_nil(groups) do
-            Logger.warn(
+            Logger.warning(
               "Plugs.GetClaimsPlug: In Client settings enable Mappers -> Add builtin -> groups"
             )
           end
@@ -205,15 +205,15 @@ defmodule PhxKeycloak do
 
           cond do
             is_nil(claims) ->
-              Logger.warn("Plugs.GetClaimsPlug: nil claims, clearing session")
+              Logger.warning("Plugs.GetClaimsPlug: nil claims, clearing session")
               clear_session(conn)
 
             %{} == claims && Map.keys(claims) == [] ->
-              Logger.warn("Plugs.GetClaimsPlug: empty claims, clearing session")
+              Logger.warning("Plugs.GetClaimsPlug: empty claims, clearing session")
               clear_session(conn)
 
             expected_group != nil and expected_group not in groups ->
-              Logger.warn(
+              Logger.warning(
                 "Plugs.GetClaimsPlug: no expected_group in claims' groups, clearing session"
               )
 

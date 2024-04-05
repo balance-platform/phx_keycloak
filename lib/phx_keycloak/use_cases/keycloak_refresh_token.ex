@@ -25,7 +25,7 @@ defmodule PhxKeycloak.UseCases.KeycloakRefreshToken do
         {result["access_token"], result["refresh_token"]}
 
       otherwise ->
-        Logger.warn(
+        Logger.warning(
           "UseCases.KeycloakRefreshToken: Ошибка обновления токена, #{inspect(otherwise)}"
         )
 
