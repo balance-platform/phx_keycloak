@@ -1,21 +1,53 @@
 name: build
 
-on: push
+on:
+  push:
+    branches:
+      - "**"
+
+  pull_request:
+    branches:
+      - master
+    types: [opened, synchronize, closed]
+
+permissions:
+  contents: read
 
 jobs:
-  tests:
-    runs-on: ubuntu-latest
-    name: OTP ${{matrix.otp}} / Elixir ${{matrix.elixir}}
+  tests:    
+    runs-on: ubuntu-20.04
+    name: Tests on ${{matrix.environment.elixir-version}}
     strategy:
       matrix:
-        otp: [25.0.4]
-        elixir: [1.14, 1.13, 1.15]
+        environment:
+          - elixir-version: 1.14
+            otp-version: 25.0.4
+          - elixir-version: 1.13
+            otp-version: 24.3.4
+
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-elixir@v1.0.0
-        with:
-          otp-version: ${{matrix.otp}}
-          elixir-version: ${{matrix.elixir}}
-      - run: mix deps.get
-      - run: mix format --check-formatted
-      - run: mix test
+    - uses: actions/checkout@v3
+    - name: Set up Elixir
+      uses: erlef/setup-beam@988e02bfe678367a02564f65ca2e37726dc0268f
+      with: ${{matrix.environment}}
+    - name: Restore dependencies cache
+      uses: actions/cache@v3
+      with:
+        path: deps/
+        key: deps-${{ runner.os }}-${{ matrix.environment.otp-version }}-${{ matrix.environment.elixir-version }}-${{ hashFiles('**/mix.lock') }}
+    - name: Restore build cache
+      uses: actions/cache@v3
+      with:
+        path: _build/test/
+        key: build-${{ runner.os }}-${{ matrix.environment.otp-version }}-${{ matrix.environment.elixir-version }}-${{ hashFiles('**/mix.lock') }}
+    - name: Install dependencies
+      run: |
+        mix local.rebar --force
+        mix local.hex --force
+        mix deps.get
+        mix compile
+        mix format --check-formatted
+    - name: Run tests
+      run: mix test
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
