@@ -8,10 +8,10 @@ jobs:
     name: OTP ${{matrix.otp}} / Elixir ${{matrix.elixir}}
     strategy:
       matrix:
-        otp: [21.3.8.10, 22.1.7]
-        elixir: [1.9.4, 1.10.3]
+        otp: [25.0.4]
+        elixir: [1.14, 1.13, 1.15]
     steps:
-      - uses: actions/checkout@v1.0.0
+      - uses: actions/checkout@v3
       - uses: actions/setup-elixir@v1.0.0
         with:
           otp-version: ${{matrix.otp}}

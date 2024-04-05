@@ -2,7 +2,7 @@ defmodule PhxKeycloak.MixProject do
   use Mix.Project
 
   @source_url "https://github.com/balance-platform/phx_jeycloak"
-  @version "0.2.2"
+  @version "0.3.0"
 
   def project do
     [
