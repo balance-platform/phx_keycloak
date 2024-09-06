@@ -1,7 +1,7 @@
 defmodule PhxKeycloak.MixProject do
   use Mix.Project
 
-  @source_url "https://github.com/balance-platform/phx_jeycloak"
+  @source_url "https://github.com/balance-platform/phx_keycloak"
   @version "0.3.0"
 
   def project do
@@ -73,7 +73,7 @@ defmodule PhxKeycloak.MixProject do
   defp docs do
     [
       main: "readme",
-      source_ref: "v#{@version}",
+      source_ref: @version,
       source_url: @source_url,
       extras: ["README.md"]
     ]
