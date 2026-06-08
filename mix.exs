@@ -42,9 +42,12 @@ defmodule PhxKeycloak.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:phoenix, ">= 1.4.0"},
+      {:phoenix, ">= 1.7.22"},
       {:httpoison, "~> 1.6"},
-      {:plug_cowboy, "~> 2.0"},
+      {:plug_cowboy, ">= 2.8.1"},
+      {:cowboy, ">= 2.15.0"},
+      {:cowlib, ">= 2.16.1"},
+      {:plug, ">= 1.15.4"},
       {:jason, "~> 1.0", optional: true},
       {:mock, "~> 0.3.0", only: :test},
       {:ex_doc, "~> 0.21", only: :dev, runtime: false},
